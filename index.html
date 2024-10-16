@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ketidaksamaan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- Menyertakan file CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-project-diagram"></i>Ketidaksamaan</h1>
+        <form method="POST">
+            <div id="input-fields">
+                <div class="form-group">
+                    <label>Kolom:</label>
+                    <input type="text" name="columns[]" placeholder="Masukkan nama kolom" required>
+                    <label>Nilai (pisahkan dengan koma):</label>
+                    <input type="text" name="values[]" placeholder="Contoh: 10, 20, 30" required>
+                </div>
+            </div>
+            <button type="button" onclick="addInput()"><i class="fas fa-plus"></i> Tambah Kolom</button>
+            <button type="submit"><i class="fas fa-paper-plane"></i> Submit</button>
+        </form>
+
+        <script>
+            function addInput() {
+                let divColumn = document.createElement('div');
+                let divValue = document.createElement('div');
+                divColumn.className = "form-group";
+                divColumn.innerHTML = `
+                    <label>Kolom:</label>
+                    <input type="text" name="columns[]" placeholder="Masukkan nama kolom" required>
+                `;
+                divValue.className = "form-group";
+                divValue.innerHTML = `
+                    <label>Nilai (pisahkan dengan koma):</label>
+                    <input type="text" name="values[]" placeholder="Contoh: 10, 20, 30" required>
+                `;
+                document.getElementById('input-fields').appendChild(divColumn);
+                document.getElementById('input-fields').appendChild(divValue);
+            }
+        </script>
+
+        {% if df %}
+            <div class="result-container">
+                <h2 class="result-title">Tabel yang Dihasilkan</h2>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="data">
+                            {{ df|safe }}
+                        </table>
+                    </div>
+                </div>
+
+                <h2 class="result-title">Matriks Jarak Segitiga</h2>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="data">
+                            {{ dist_matrix|safe }}
+                        </table>
+                    </div>
+                </div>
+
+                <h2 class="result-title">Dendrogram</h2>
+                <div class="card">
+                    <img src="data:image/png;base64,{{ plot_url }}" alt="Dendrogram">
+                </div>
+            </div>
+        {% endif %}
+
+        <footer>
+            <p>Created by Aprido Ilham &copy; 2024</p>
+        </footer>
+    </div>
+</body>
+</html>
